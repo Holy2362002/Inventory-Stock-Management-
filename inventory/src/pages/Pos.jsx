@@ -6,7 +6,7 @@ import SaleProductCard from "../components/SaleProduct";
 const api = "https://inventory-api-b0va.onrender.com";
 export async function fetchProduct() {
   const token = localStorage.getItem("token");
-  
+
   if (!token) {
     throw new Error("Authentication required. Please login again.");
   }
@@ -22,14 +22,16 @@ export async function fetchProduct() {
 
     if (!res.ok) {
       const errorData = await res.json().catch(() => ({}));
-      
+
       if (res.status === 401) {
         localStorage.removeItem("token");
         throw new Error("Session expired. Please login again.");
       }
-      
+
       throw new Error(
-        errorData.msg || errorData.error || `Failed to fetch products (${res.status})`
+        errorData.msg ||
+          errorData.error ||
+          `Failed to fetch products (${res.status})`
       );
     }
 

@@ -46,7 +46,7 @@ router.post("/", auth, async (req, res) => {
     }
 
     const totalPrice =
-      priceType === "Wholesale"
+      priceType === "WholesalePrice"
         ? saleQuantity * product.WholesalePrice
         : saleQuantity * product.RetailPrice;
 
@@ -54,7 +54,7 @@ router.post("/", auth, async (req, res) => {
       data: {
         quantity: saleQuantity,
         totalPrice,
-        priceType: priceType === "Wholesale" ? "Wholesale" : "Retail",
+        priceType: priceType === "WholesalePrice" ? "Wholesale" : "Retail",
         ProductId: Number(productId),
       },
       include: {

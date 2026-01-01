@@ -29,7 +29,7 @@ export default function SaleProductCard() {
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
-    
+
     const product = cart.find((item) => item.id === productId);
     if (product && newQuantity > product.Stock) return;
 
@@ -46,7 +46,8 @@ export default function SaleProductCard() {
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => {
-      const price = priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
+      const price =
+        priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
       return total + price * item.quantity;
     }, 0);
   };
@@ -81,7 +82,8 @@ export default function SaleProductCard() {
         }
 
         const productData = await getRes.json();
-        const currentProduct = productData.product || productData.products || productData;
+        const currentProduct =
+          productData.product || productData.products || productData;
 
         if (!currentProduct) {
           throw new Error(`Product ${item.name} not found`);
@@ -111,7 +113,9 @@ export default function SaleProductCard() {
         if (!updateRes.ok) {
           const errorData = await updateRes.json();
           throw new Error(
-            `Failed to update ${item.name}: ${errorData.msg || errorData.error || "Unknown error"}`
+            `Failed to update ${item.name}: ${
+              errorData.msg || errorData.error || "Unknown error"
+            }`
           );
         }
 
@@ -126,7 +130,9 @@ export default function SaleProductCard() {
 
       // Show success message
       alert(
-        `Sale completed successfully!\nTotal: MMK ${calculateTotal().toFixed(2)}\n\nProducts sold:\n${cart
+        `Sale completed successfully!\nTotal: MMK ${calculateTotal().toFixed(
+          2
+        )}\n\nProducts sold:\n${cart
           .map((item) => `- ${item.name} x${item.quantity}`)
           .join("\n")}`
       );
@@ -158,7 +164,10 @@ export default function SaleProductCard() {
           <ShoppingBagOutlinedIcon />
           <Typography fontWeight={600}>Current Sale</Typography>
         </Box>
-        <Chip label={priceType === "RetailPrice" ? "RETAIL" : "WHOLESALE"} size="small" />
+        <Chip
+          label={priceType === "RetailPrice" ? "RETAIL" : "WHOLESALE"}
+          size="small"
+        />
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -192,7 +201,10 @@ export default function SaleProductCard() {
           </Box>
         ) : (
           cart.map((item) => {
-            const price = priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
+            const price =
+              priceType === "RetailPrice"
+                ? item.RetailPrice
+                : item.WholesalePrice;
             return (
               <Paper
                 key={item.id}
@@ -225,7 +237,9 @@ export default function SaleProductCard() {
                     >
                       <IconButton
                         size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity - 1)
+                        }
                       >
                         <RemoveIcon fontSize="small" />
                       </IconButton>
@@ -236,7 +250,9 @@ export default function SaleProductCard() {
 
                       <IconButton
                         size="small"
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(item.id, item.quantity + 1)
+                        }
                         disabled={item.quantity >= item.Stock}
                       >
                         <AddIcon fontSize="small" />
@@ -252,7 +268,11 @@ export default function SaleProductCard() {
                     </IconButton>
                   </Box>
                 </Box>
-                <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 0.5, display: "block" }}
+                >
                   Subtotal: MMK {(price * item.quantity).toFixed(2)}
                 </Typography>
               </Paper>

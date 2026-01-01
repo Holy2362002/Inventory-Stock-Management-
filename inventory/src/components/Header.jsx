@@ -6,6 +6,7 @@ import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useApp } from "../AppProvider";
+import { useNavigate } from "react-router";
 import {
   LightMode as LightModeIcon,
   DarkMode as DarkModeIcon,
@@ -14,6 +15,7 @@ import {
 export default function Header() {
   const { setOpenDrawer, user, setUser } = useApp();
   const { mode, setMode } = useApp();
+  const navigate = useNavigate();
   return (
     <Box sx={{ flexGrow: 1, position: "sticky", top: 0, zIndex: 1100 }}>
       <AppBar position="relative">
@@ -53,7 +55,7 @@ export default function Header() {
               Logout
             </Button>
           ) : (
-            <Button color="inherit" href="/login">
+            <Button color="inherit" onClick={() => navigate("/login")}>
               Login
             </Button>
           )}

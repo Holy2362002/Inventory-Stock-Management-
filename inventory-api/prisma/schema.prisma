@@ -1,0 +1,57 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum Category {
+  grocery
+  beauty
+}
+
+enum PriceType {
+  Retail
+  Wholesale
+}
+
+model User {
+  id Int @id @default(autoincrement())
+  name String
+  username String @unique
+  bio String?
+  password String 
+  products Product[]
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  RetailPrice Int
+  WholesalePrice Int
+  Stock Int
+  PreOrder Int @default(0)
+  Category Category
+  CreatedAt DateTime @default(now())
+  UpdatedAt DateTime @default(now())
+  UserId Int
+  User User @relation(fields: [UserId], references: [id])
+  Sales Sale[]
+}
+
+model Sale {
+  id Int @id @default(autoincrement())
+  quantity Int
+  totalPrice Int
+  priceType PriceType @default(Retail)
+  saleDate DateTime @default(now())
+  ProductId Int
+  Product Product @relation(fields: [ProductId], references: [id], onDelete: Cascade)
+}
+
+

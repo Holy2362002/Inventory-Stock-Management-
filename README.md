@@ -6,19 +6,19 @@ This project is built to demonstrate real-world full-stack development skills an
 Installation & Setup -
 git clone https://github.com/Holy2362002/Inventory-Stock-Management-
 
-Backend SetUp
-cd inventory-api
-npm i
-write secret code in .env file
-npm run dev
-port 8800
+Backend SetUp-
+cd inventory-api-
+npm i-
+(write secret code in .env file)-
+npm run dev-
+port 8800-
 
-Frontend SetUp
-cd inventory 
-npm i
-npm run dev
+Frontend SetUp-
+cd inventory -
+npm i-
+npm run dev-
 
-Features
+Features-
 
 Product management (add, update, delete products)
 Stock quantity tracking

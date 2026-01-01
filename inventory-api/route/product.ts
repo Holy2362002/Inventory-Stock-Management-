@@ -187,7 +187,6 @@ router.put("/:id", auth, async (req, res) => {
 
     const productData = req.body;
 
-    // Validate stock if being updated
     if (productData.Stock !== undefined) {
       const newStock = parseInt(productData.Stock);
       if (isNaN(newStock) || newStock < 0) {

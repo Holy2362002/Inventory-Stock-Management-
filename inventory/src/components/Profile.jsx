@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 async function fetchUserProfile() {
   const token = localStorage.getItem("token");
   if (!token) {

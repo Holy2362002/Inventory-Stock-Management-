@@ -2,7 +2,7 @@ import DashBoardLayout from "../components/DashboardLayout";
 import { useQuery } from "@tanstack/react-query";
 import { CircularProgress, Alert } from "@mui/material";
 
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 
 export async function fetchProduct() {
   const token = localStorage.getItem("token");

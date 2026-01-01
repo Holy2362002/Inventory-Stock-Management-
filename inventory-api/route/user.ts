@@ -78,7 +78,6 @@ router.post("/login", async (req, res) => {
       return res.status(401).json({ msg: "incorrect username or password" });
     }
 
-    // Don't send password back
     const { password: _, ...userWithoutPassword } = user;
 
     return res.json({

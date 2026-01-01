@@ -19,7 +19,7 @@ import CreditCardIcon from "@mui/icons-material/CreditCard";
 import { useApp } from "../AppProvider";
 import { useQueryClient } from "@tanstack/react-query";
 
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 
 export default function SaleProductCard() {
   const { cart, setCart, priceType } = useApp();

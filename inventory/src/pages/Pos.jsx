@@ -3,7 +3,7 @@ import Product from "../components/Products";
 import Search from "../components/Search";
 import { Alert, Box, CircularProgress, Container } from "@mui/material";
 import SaleProductCard from "../components/SaleProduct";
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 export async function fetchProduct() {
   const token = localStorage.getItem("token");
   

@@ -16,7 +16,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useForm } from "react-hook-form";
 import { useQueryClient } from "@tanstack/react-query";
 
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 
 export default function AddProduct({ open, onClose }) {
   const [category, setCategory] = useState("grocery");

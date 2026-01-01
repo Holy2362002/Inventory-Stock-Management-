@@ -25,7 +25,7 @@ export default function AppProvider({ children }) {
   const [cart, setCart] = useState([]);
 
   useEffect(() => {
-    const api = "http://localhost:8800/users/verify";
+    const api = "https://inventory-api-b0va.onrender.com/users/verify";
     const token = localStorage.getItem("token");
     fetch(api, {
       method: "GET",

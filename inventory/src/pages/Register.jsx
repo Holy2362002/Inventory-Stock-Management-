@@ -8,7 +8,7 @@ import {
   } from "@mui/material";
   import { useForm } from "react-hook-form";
   import { useNavigate } from "react-router";
-  const api = "http://localhost:8800";
+  const api = "https://inventory-api-b0va.onrender.com";
   export default function Register() {
     const navigate = useNavigate();
     const {

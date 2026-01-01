@@ -15,7 +15,7 @@ import AddProduct from "../components/AddProduct";
 import EditProduct from "../components/EditProduct";
 import { useState } from "react";
 
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 
 export async function fetchProduct() {
   const token = localStorage.getItem("token");

@@ -18,7 +18,7 @@ import {
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Delete } from "@mui/icons-material";
 
-const api = "http://localhost:8800";
+const api = "https://inventory-api-b0va.onrender.com";
 
 export async function fetchSales() {
   const token = localStorage.getItem("token");

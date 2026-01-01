@@ -11,7 +11,7 @@ import {
   import { useNavigate } from "react-router";
   import { useApp } from "../AppProvider";
   import { useState } from "react";
-  const api = "http://localhost:8800";
+  const api = "https://inventory-api-b0va.onrender.com";
   export default function Login() {
     const navigate = useNavigate();
     const { setUser } = useApp();

@@ -119,6 +119,29 @@ export default function SaleProductCard() {
           );
         }
 
+        // Create sale record
+        const saleRes = await fetch(`${api}/sales`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            productId: item.id,
+            quantity: item.quantity,
+            priceType: priceType,
+          }),
+        });
+
+        if (!saleRes.ok) {
+          const errorData = await saleRes.json();
+          throw new Error(
+            `Failed to record sale for ${item.name}: ${
+              errorData.msg || errorData.error || "Unknown error"
+            }`
+          );
+        }
+
         return { success: true, product: item.name };
       });
 
@@ -127,6 +150,7 @@ export default function SaleProductCard() {
 
       // Refresh product list
       queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["sales"] });
 
       // Show success message
       alert(

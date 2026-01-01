@@ -43,6 +43,7 @@ model Sale {
   id Int @id @default(autoincrement())
   quantity Int
   totalPrice Int
+  priceType String @default("Retail")
   saleDate DateTime @default(now())
   ProductId Int
   Product Product @relation(fields: [ProductId], references: [id])

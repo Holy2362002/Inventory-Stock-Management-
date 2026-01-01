@@ -203,6 +203,7 @@ export default function AddProduct({ open, onClose }) {
                 fullWidth
                 type="number"
                 {...register("PreOrder", {
+                  required: "Reorder point is required",
                   min: { value: 0, message: "Must be positive" },
                 })}
                 error={!!errors.PreOrder}

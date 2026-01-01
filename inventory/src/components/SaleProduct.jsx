@@ -119,6 +119,10 @@ export default function SaleProductCard() {
           );
         }
 
+        const price =
+          priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
+        const totalPrice = price * item.quantity;
+
         // Create sale record
         const saleRes = await fetch(`${api}/sales`, {
           method: "POST",
@@ -130,6 +134,7 @@ export default function SaleProductCard() {
             productId: item.id,
             quantity: item.quantity,
             priceType: priceType,
+            totalPrice: totalPrice,
           }),
         });
 

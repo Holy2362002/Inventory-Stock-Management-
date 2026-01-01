@@ -15,11 +15,8 @@ import {
 } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
-import { useState } from "react";
 
 export default function ProductsTable({ products, onEdit, onDelete }) {
-  const [searchTerm, setSearchTerm] = useState("");
-
   if (!products || !Array.isArray(products) || products.length === 0) {
     return (
       <Box sx={{ mt: 3 }}>
@@ -31,10 +28,6 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
       </Box>
     );
   }
-
-  const filteredProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
   return (
     <Box>
@@ -53,8 +46,6 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
             fullWidth
             variant="outlined"
             placeholder="Enter product name or SKU"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -76,8 +67,8 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
           sx={{
             borderRadius: 4,
             border: 0.7,
-            maxHeight: filteredProducts.length > 20 ? 500 : "none",
-            overflowY: filteredProducts.length > 20 ? "auto" : "visible",
+            maxHeight: products.length > 20 ? 500 : "none",
+            overflowY: products.length > 20 ? "auto" : "visible",
           }}
         >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -91,7 +82,7 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {filteredProducts.map((product) => (
+              {products.map((product) => (
                 <TableRow
                   key={product.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -134,7 +125,9 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
                       <IconButton onClick={() => onEdit && onEdit(product)}>
                         <EditIcon color="primary" />
                       </IconButton>
-                      <IconButton onClick={() => onDelete(product.id)}>
+                      <IconButton
+                        onClick={() => onDelete && onDelete(product.id)}
+                      >
                         <DeleteIcon color="error" />
                       </IconButton>
                     </Box>

@@ -23,7 +23,6 @@ export default function AppProvider({ children }) {
   const [open, setOpen] = useState(false);
   const [priceType, setPriceType] = useState("RetailPrice");
   const [cart, setCart] = useState([]);
-  const [searchProduct, setSearchProduct] = useState("");
 
   useEffect(() => {
     const api = "http://localhost:8800/users/verify";
@@ -68,8 +67,6 @@ export default function AppProvider({ children }) {
         setPriceType,
         cart,
         setCart,
-        searchProduct,
-        setSearchProduct,
       }}
     >
       <ThemeProvider theme={theme}>

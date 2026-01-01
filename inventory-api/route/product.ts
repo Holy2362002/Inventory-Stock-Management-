@@ -74,6 +74,7 @@ router.post("/", auth, async (req, res) => {
       PreOrder,
     } = productData;
 
+    // Validate required fields
     if (
       !name ||
       RetailPrice === undefined ||
@@ -86,6 +87,7 @@ router.post("/", auth, async (req, res) => {
       });
     }
 
+    // Validate Category enum
     if (
       categoryValue !== Category.grocery &&
       categoryValue !== Category.beauty
@@ -145,27 +147,13 @@ router.delete("/:id", auth, async (req, res) => {
     if (!req.user) {
       return res.status(401).json({ msg: "Unauthorized" });
     }
-    const productId = Number(req.params.id);
-
-    const existingProduct = await prisma.product.findFirst({
+    const productId = req.params.id;
+    await prisma.product.deleteMany({
       where: {
-        id: productId,
+        id: Number(productId),
         UserId: req.user.id,
       },
     });
-
-    if (!existingProduct) {
-      return res.status(404).json({
-        msg: "Product not found or you don't have permission to delete it",
-      });
-    }
-
-    await prisma.product.delete({
-      where: {
-        id: productId,
-      },
-    });
-
     res.status(200).json({ msg: "Product deleted successfully" });
   } catch (error: any) {
     console.error("Error deleting product:", error);
@@ -183,6 +171,7 @@ router.put("/:id", auth, async (req, res) => {
     }
     const productId = Number(req.params?.id);
 
+    // First verify the product belongs to the user
     const existingProduct = await prisma.product.findFirst({
       where: {
         id: productId,
@@ -198,6 +187,7 @@ router.put("/:id", auth, async (req, res) => {
 
     const productData = req.body;
 
+    // Validate stock if being updated
     if (productData.Stock !== undefined) {
       const newStock = parseInt(productData.Stock);
       if (isNaN(newStock) || newStock < 0) {

@@ -15,11 +15,6 @@ enum Category {
   beauty
 }
 
-enum PriceType {
-  Retail
-  Wholesale
-}
-
 model User {
   id Int @id @default(autoincrement())
   name String
@@ -48,10 +43,9 @@ model Sale {
   id Int @id @default(autoincrement())
   quantity Int
   totalPrice Int
-  priceType PriceType @default(Retail)
   saleDate DateTime @default(now())
   ProductId Int
-  Product Product @relation(fields: [ProductId], references: [id], onDelete: Cascade)
+  Product Product @relation(fields: [ProductId], references: [id])
 }
 
 

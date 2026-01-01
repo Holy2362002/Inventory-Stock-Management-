@@ -1,3 +1,4 @@
+import "dotenv/config";
 import express from "express";
 const app = express();
 
@@ -18,8 +19,6 @@ app.use("/products", productRouter);
 import { saleRouter } from "./route/sale";
 app.use("/sales", saleRouter);
 
-
-
-app.listen(8800, () => {
-  console.log("sever is running in port 8800>>>");
+app.listen(process.env.PORT || 8800, () => {
+  console.log("sever is running in port", process.env.PORT || 8800);
 });

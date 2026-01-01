@@ -9,15 +9,15 @@ import TableRow from "@mui/material/TableRow";
 import { Button } from "@mui/material";
 import { useApp } from "../AppProvider";
 import { grey } from "@mui/material/colors";
-import { useState } from "react";
 
 export default function Product({ products }) {
-  const { priceType, cart, setCart, searchProduct } = useApp();
+  const { priceType, cart, setCart } = useApp();
 
   const handleAddToCart = (product) => {
     const existingItem = cart.find((item) => item.id === product.id);
-
+    
     if (existingItem) {
+      // If product already in cart, increment quantity (but check stock limit)
       if (existingItem.quantity < product.Stock) {
         setCart(
           cart.map((item) =>
@@ -28,10 +28,8 @@ export default function Product({ products }) {
         );
       }
     } else {
-      const price =
-        priceType === "RetailPrice"
-          ? product.RetailPrice
-          : product.WholesalePrice;
+      // Add new product to cart with quantity 1
+      const price = priceType === "RetailPrice" ? product.RetailPrice : product.WholesalePrice;
       setCart([
         ...cart,
         {
@@ -43,17 +41,13 @@ export default function Product({ products }) {
     }
   };
 
-  const filterSearchProducts = products.filter((product) =>
-    product.name.toLowerCase().includes(searchProduct.toLowerCase())
-  );
-
   return (
     <TableContainer
       sx={{
         borderRadius: 2,
         border: 0.7,
-        maxHeight: filterSearchProducts.length > 20 ? 500 : "none",
-        overflowY: filterSearchProducts.length > 20 ? "auto" : "visible",
+        maxHeight: products.length > 20 ? 500 : "none",
+        overflowY: products.length > 20 ? "auto" : "visible",
         backgroundColor: grey[500],
       }}
     >
@@ -71,7 +65,7 @@ export default function Product({ products }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {filterSearchProducts.map((product) => (
+          {products.map((product) => (
             <TableRow
               key={product.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

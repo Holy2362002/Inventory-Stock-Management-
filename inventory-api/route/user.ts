@@ -1,4 +1,3 @@
-/// <reference path="../types/express.d.ts" />
 import express from "express";
 const router = express.Router();
 import { prisma } from "../libs/prisma";

@@ -29,7 +29,7 @@ export default function SaleProductCard() {
 
   const updateQuantity = (productId, newQuantity) => {
     if (newQuantity < 1) return;
-
+    
     const product = cart.find((item) => item.id === productId);
     if (product && newQuantity > product.Stock) return;
 
@@ -46,8 +46,7 @@ export default function SaleProductCard() {
 
   const calculateTotal = () => {
     return cart.reduce((total, item) => {
-      const price =
-        priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
+      const price = priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
       return total + price * item.quantity;
     }, 0);
   };
@@ -67,44 +66,72 @@ export default function SaleProductCard() {
         throw new Error("Authentication required");
       }
 
+      // Process each product in the cart
       const updatePromises = cart.map(async (item) => {
-        const saleRes = await fetch(`${api}/sales`, {
-          method: "POST",
+        // Fetch current product to get latest stock
+        const getRes = await fetch(`${api}/products/${item.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!getRes.ok) {
+          throw new Error(`Failed to fetch product ${item.name}`);
+        }
+
+        const productData = await getRes.json();
+        const currentProduct = productData.product || productData.products || productData;
+
+        if (!currentProduct) {
+          throw new Error(`Product ${item.name} not found`);
+        }
+
+        // Calculate new stock
+        const newStock = currentProduct.Stock - item.quantity;
+
+        if (newStock < 0) {
+          throw new Error(
+            `Insufficient stock for ${item.name}. Available: ${currentProduct.Stock}, Requested: ${item.quantity}`
+          );
+        }
+
+        // Update product stock
+        const updateRes = await fetch(`${api}/products/${item.id}`, {
+          method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            productId: item.id,
-            quantity: item.quantity,
-            priceType: priceType === "WholesalePrice" ? "Wholesale" : "Retail",
+            Stock: newStock,
           }),
         });
 
-        if (!saleRes.ok) {
-          const errorData = await saleRes.json();
+        if (!updateRes.ok) {
+          const errorData = await updateRes.json();
           throw new Error(
-            `Failed to sell ${item.name}: ${
-              errorData.msg || errorData.error || "Unknown error"
-            }`
+            `Failed to update ${item.name}: ${errorData.msg || errorData.error || "Unknown error"}`
           );
         }
 
         return { success: true, product: item.name };
       });
 
+      // Wait for all updates to complete
       await Promise.all(updatePromises);
 
+      // Refresh product list
       queryClient.invalidateQueries({ queryKey: ["products"] });
 
+      // Show success message
       alert(
-        `Sale completed successfully!\nTotal: MMK ${calculateTotal().toFixed(
-          2
-        )}\n\nProducts sold:\n${cart
+        `Sale completed successfully!\nTotal: MMK ${calculateTotal().toFixed(2)}\n\nProducts sold:\n${cart
           .map((item) => `- ${item.name} x${item.quantity}`)
           .join("\n")}`
       );
 
+      // Clear cart
       setCart([]);
     } catch (error) {
       console.error("Error completing sale:", error);
@@ -131,10 +158,7 @@ export default function SaleProductCard() {
           <ShoppingBagOutlinedIcon />
           <Typography fontWeight={600}>Current Sale</Typography>
         </Box>
-        <Chip
-          label={priceType === "RetailPrice" ? "RETAIL" : "WHOLESALE"}
-          size="small"
-        />
+        <Chip label={priceType === "RetailPrice" ? "RETAIL" : "WHOLESALE"} size="small" />
       </Box>
 
       <Divider sx={{ my: 2 }} />
@@ -168,10 +192,7 @@ export default function SaleProductCard() {
           </Box>
         ) : (
           cart.map((item) => {
-            const price =
-              priceType === "RetailPrice"
-                ? item.RetailPrice
-                : item.WholesalePrice;
+            const price = priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
             return (
               <Paper
                 key={item.id}
@@ -204,9 +225,7 @@ export default function SaleProductCard() {
                     >
                       <IconButton
                         size="small"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity - 1)
-                        }
+                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
                       >
                         <RemoveIcon fontSize="small" />
                       </IconButton>
@@ -217,9 +236,7 @@ export default function SaleProductCard() {
 
                       <IconButton
                         size="small"
-                        onClick={() =>
-                          updateQuantity(item.id, item.quantity + 1)
-                        }
+                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
                         disabled={item.quantity >= item.Stock}
                       >
                         <AddIcon fontSize="small" />
@@ -235,11 +252,7 @@ export default function SaleProductCard() {
                     </IconButton>
                   </Box>
                 </Box>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ mt: 0.5, display: "block" }}
-                >
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
                   Subtotal: MMK {(price * item.quantity).toFixed(2)}
                 </Typography>
               </Paper>

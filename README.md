@@ -3,7 +3,7 @@ Inventory Stock Management System
 A full-stack Inventory Stock Management application designed to help businesses track products, manage stock levels, and monitor inventory efficiently.
 This project is built to demonstrate real-world full-stack development skills and follows a clean, scalable structure.
 
-Installation & Setup
+Installation & Setup -
 git clone https://github.com/Holy2362002/Inventory-Stock-Management-
 
 Backend SetUp

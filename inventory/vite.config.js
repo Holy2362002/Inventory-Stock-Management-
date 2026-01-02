@@ -10,4 +10,9 @@ export default defineConfig({
       index: "/index.html",
     },
   },
+  preview: {
+    historyApiFallback: {
+      index: "/index.html",
+    },
+  },
 });

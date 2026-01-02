@@ -67,9 +67,7 @@ export default function SaleProductCard() {
         throw new Error("Authentication required");
       }
 
-      // Process each product in the cart
       const updatePromises = cart.map(async (item) => {
-        // Fetch current product to get latest stock
         const getRes = await fetch(`${api}/products/${item.id}`, {
           method: "GET",
           headers: {
@@ -89,7 +87,6 @@ export default function SaleProductCard() {
           throw new Error(`Product ${item.name} not found`);
         }
 
-        // Calculate new stock
         const newStock = currentProduct.Stock - item.quantity;
 
         if (newStock < 0) {
@@ -98,7 +95,6 @@ export default function SaleProductCard() {
           );
         }
 
-        // Update product stock
         const updateRes = await fetch(`${api}/products/${item.id}`, {
           method: "PUT",
           headers: {
@@ -123,7 +119,6 @@ export default function SaleProductCard() {
           priceType === "RetailPrice" ? item.RetailPrice : item.WholesalePrice;
         const totalPrice = price * item.quantity;
 
-        // Create sale record
         const saleRes = await fetch(`${api}/sales`, {
           method: "POST",
           headers: {
@@ -150,14 +145,11 @@ export default function SaleProductCard() {
         return { success: true, product: item.name };
       });
 
-      // Wait for all updates to complete
       await Promise.all(updatePromises);
 
-      // Refresh product list
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["sales"] });
 
-      // Show success message
       alert(
         `Sale completed successfully!\nTotal: MMK ${calculateTotal().toFixed(
           2
@@ -166,7 +158,6 @@ export default function SaleProductCard() {
           .join("\n")}`
       );
 
-      // Clear cart
       setCart([]);
     } catch (error) {
       console.error("Error completing sale:", error);

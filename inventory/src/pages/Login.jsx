@@ -59,6 +59,10 @@ export default function Login() {
         </Alert>
       )}
       <Box component="form" noValidate onSubmit={handleSubmit(onSubmit)}>
+        <Typography>
+          if you don't have an account,{" "}
+          <button onClick={() => navigate("/register")}>create one</button>
+        </Typography>
         <Stack spacing={5}>
           <TextField
             fullWidth

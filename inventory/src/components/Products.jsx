@@ -15,9 +15,8 @@ export default function Product({ products }) {
 
   const handleAddToCart = (product) => {
     const existingItem = cart.find((item) => item.id === product.id);
-    
+
     if (existingItem) {
-      // If product already in cart, increment quantity (but check stock limit)
       if (existingItem.quantity < product.Stock) {
         setCart(
           cart.map((item) =>
@@ -28,8 +27,10 @@ export default function Product({ products }) {
         );
       }
     } else {
-      // Add new product to cart with quantity 1
-      const price = priceType === "RetailPrice" ? product.RetailPrice : product.WholesalePrice;
+      const price =
+        priceType === "RetailPrice"
+          ? product.RetailPrice
+          : product.WholesalePrice;
       setCart([
         ...cart,
         {
@@ -48,7 +49,9 @@ export default function Product({ products }) {
         border: 0.7,
         maxHeight: products.length > 20 ? 500 : "none",
         overflowY: products.length > 20 ? "auto" : "visible",
+        overflowX: "auto",
         backgroundColor: grey[500],
+        width: "100%",
       }}
     >
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -85,6 +88,10 @@ export default function Product({ products }) {
                   onClick={() => handleAddToCart(product)}
                   disabled={product.Stock === 0}
                   size="small"
+                  sx={{
+                    fontSize: { xs: "0.7rem", sm: "0.875rem" },
+                    padding: { xs: "4px 8px", sm: "6px 16px" },
+                  }}
                 >
                   Sale Product
                 </Button>

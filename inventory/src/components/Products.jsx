@@ -11,7 +11,15 @@ import { useApp } from "../AppProvider";
 import { grey } from "@mui/material/colors";
 
 export default function Product({ products }) {
-  const { priceType, cart, setCart } = useApp();
+  const { priceType, cart, setCart, searchProduct } = useApp();
+
+  const filteredProducts =
+    products?.filter(
+      (product) =>
+        product.name.toLowerCase().includes(searchProduct.toLowerCase()) ||
+        (product.sku &&
+          product.sku.toLowerCase().includes(searchProduct.toLowerCase()))
+    ) || [];
 
   const handleAddToCart = (product) => {
     const existingItem = cart.find((item) => item.id === product.id);
@@ -47,8 +55,8 @@ export default function Product({ products }) {
       sx={{
         borderRadius: 2,
         border: 0.7,
-        maxHeight: products.length > 20 ? 500 : "none",
-        overflowY: products.length > 20 ? "auto" : "visible",
+        maxHeight: filteredProducts.length > 20 ? 500 : "none",
+        overflowY: filteredProducts.length > 20 ? "auto" : "visible",
         overflowX: "auto",
         backgroundColor: grey[500],
         width: "100%",
@@ -68,7 +76,7 @@ export default function Product({ products }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <TableRow
               key={product.id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

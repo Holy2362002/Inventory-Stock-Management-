@@ -6,6 +6,8 @@ export default defineConfig({
   plugins: [react()],
   server: {
     open: true,
-    historyApiFallback: true,
+    historyApiFallback: {
+      index: "/index.html",
+    },
   },
 });

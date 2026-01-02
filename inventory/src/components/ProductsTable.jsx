@@ -15,14 +15,33 @@ import {
 } from "@mui/material";
 import { Search as SearchIcon } from "@mui/icons-material";
 import { Edit as EditIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import { useState } from "react";
 
 export default function ProductsTable({ products, onEdit, onDelete }) {
-  if (!products || !Array.isArray(products) || products.length === 0) {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter products based on search term
+  const filteredProducts =
+    products?.filter(
+      (product) =>
+        (product.name &&
+          product.name.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (product.sku &&
+          product.sku.toLowerCase().includes(searchTerm.toLowerCase()))
+    ) || [];
+
+  if (
+    !filteredProducts ||
+    !Array.isArray(filteredProducts) ||
+    filteredProducts.length === 0
+  ) {
     return (
       <Box sx={{ mt: 3 }}>
         <Paper sx={{ p: 3, textAlign: "center" }}>
           <Typography variant="body1" color="text.secondary">
-            No products found. Add your first product to get started!
+            {searchTerm
+              ? "No products match your search."
+              : "No products found. Add your first product to get started!"}
           </Typography>
         </Paper>
       </Box>
@@ -46,6 +65,8 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
             fullWidth
             variant="outlined"
             placeholder="Enter product name or SKU"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -67,8 +88,8 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
           sx={{
             borderRadius: 4,
             border: 0.7,
-            maxHeight: products.length > 20 ? 500 : "none",
-            overflowY: products.length > 20 ? "auto" : "visible",
+            maxHeight: filteredProducts.length > 20 ? 500 : "none",
+            overflowY: filteredProducts.length > 20 ? "auto" : "visible",
           }}
         >
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
@@ -82,7 +103,7 @@ export default function ProductsTable({ products, onEdit, onDelete }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {products.map((product) => (
+              {filteredProducts.map((product) => (
                 <TableRow
                   key={product.id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
